@@ -195,6 +195,47 @@ def github_member(pl):
     return s, t
 
 
+def github_commit_comment(pl):
+    t = "Event: Comment\n\n"
+    t += "Action: " + str(pl['action']) + "\n"
+    t += "Sender: " + str(pl['sender']['login']) + "\n"
+    t += "Repository Name: " + str(pl['repository']['name']) + "\n"
+    t += "Repository Full: " + str(pl['repository']['full_name']) + "\n"
+    if (str(pl['repository']['description']) != "null"):
+        t += "Description: " + str(pl['repository']['description']) + "\n"
+    t += "URL: " + str(pl['repository']['html_url']) + "\n"
+    t += "Owner: " + str(pl['repository']['owner']['login']) + "\n"
+
+    t += "\n\n"
+    if (str(pl['comment']['user']['login'])):
+        t += "Account: " + str(pl['comment']['user']['login']) + "\n"
+    if (str(pl['comment']['user']['type'])):
+        t += "Type: " + str(pl['comment']['user']['type']) + "\n"
+    if (str(pl['comment']['user']['url'])):
+        t += "URL: " + str(pl['comment']['user']['url']) + "\n"
+    t += "\n\n"
+    if (str(pl['comment']['created_at'])):
+        t += "Created At: " + str(pl['comment']['created_at']) + "\n"
+    if (str(pl['comment']['commit_id'])):
+        t += "Commit ID: " + str(pl['comment']['commit_id']) + "\n"
+    if (str(pl['comment']['author_association'])):
+        t += "Author Association: " + str(pl['comment']['author_association']) + "\n"
+    if (str(pl['comment']['html_url'])):
+        t += "Comment URL: " + str(pl['comment']['html_url']) + "\n"
+    t += "\n"
+    if (str(pl['comment']['body'])):
+        t += "Comment: " + str(pl['comment']['body']) + "\n"
+
+    if ('organization' in pl):
+        s_cm = "[" + str(pl['organization']['login']) + "/" + str(pl['repository']['name']) + "]"
+    else:
+        s_cm = "[" + str(pl['repository']['owner']['login']) + "/" + str(pl['repository']['name']) + "]"
+
+    s = "Comment " + str(pl['action']) + ": " + str(pl['repository']['name'])
+
+    return s, t
+
+
 def github_else(eventtype, pl):
     t = "Event: " + str(eventtype) + "\n\n"
     t += json.dumps(pl, indent=2, sort_keys=True)
@@ -250,6 +291,8 @@ elif (eventtype == "issues"):
     subject, message = github_issues(pl)
 elif (eventtype == "member"):
     subject, message = github_member(pl)
+elif (eventtype == "commit_comment"):
+    subject, message = github_commit_comment(pl)
 else:
     subject, message = github_else(eventtype, pl)
 
