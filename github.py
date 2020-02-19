@@ -236,6 +236,83 @@ def github_commit_comment(pl):
     return s, t
 
 
+def github_fork(pl):
+    t = "Event: Fork\n\n"
+    t += "Sender: " + str(pl['sender']['login']) + "\n"
+    t += "Repository Name: " + str(pl['repository']['name']) + "\n"
+    t += "Repository Full: " + str(pl['repository']['full_name']) + "\n"
+    if (str(pl['repository']['description']) != "null"):
+        t += "Description: " + str(pl['repository']['description']) + "\n"
+    t += "URL: " + str(pl['repository']['html_url']) + "\n"
+    t += "Owner: " + str(pl['repository']['owner']['login']) + "\n"
+
+    t += "\n\n"
+    t += "Forked to:\n"
+    t += "Repository Name: " + str(pl['forkee']['name']) + "\n"
+    t += "Repository Full: " + str(pl['forkee']['full_name']) + "\n"
+    t += "URL: " + str(pl['forkee']['html_url']) + "\n"
+    t += "Owner: " + str(pl['forkee']['owner']['login']) + "\n"
+    t += "Private: " + str(pl['forkee']['private']) + "\n"
+    t += "Public: " + str(pl['forkee']['public']) + "\n"
+
+    if ('organization' in pl):
+        s_cm = "[" + str(pl['organization']['login']) + "/" + str(pl['repository']['name']) + "]"
+    else:
+        s_cm = "[" + str(pl['repository']['owner']['login']) + "/" + str(pl['repository']['name']) + "]"
+
+    s = "Fork: " + str(pl['repository']['name'])
+
+    return s, t
+
+
+def github_pull_request(pl):
+    t = "Event: Pull Request\n\n"
+    t += "Action: " + str(pl['action']) + "\n"
+    t += "Sender: " + str(pl['sender']['login']) + "\n"
+    t += "Repository Name: " + str(pl['repository']['name']) + "\n"
+    t += "Repository Full: " + str(pl['repository']['full_name']) + "\n"
+    if (str(pl['repository']['description']) != "null"):
+        t += "Description: " + str(pl['repository']['description']) + "\n"
+    t += "URL: " + str(pl['repository']['html_url']) + "\n"
+    t += "Owner: " + str(pl['repository']['owner']['login']) + "\n"
+
+    t += "\n\n"
+    if (str(pl['pull_request']['title'])):
+        t += "Title: " + str(pl['pull_request']['title']) + "\n"
+    t += "\n"
+    if (str(pl['pull_request']['user']['login'])):
+        t += "User: " + str(pl['pull_request']['user']['login']) + "\n"
+    if (str(pl['pull_request']['_links']['html']['href'])):
+        t += "URL: " + str(pl['pull_request']['_links']['html']['href']) + "\n"
+    if (str(pl['pull_request']['additions'])):
+        t += "Additions: " + str(pl['pull_request']['additions']) + "\n"
+    if (str(pl['pull_request']['deletions'])):
+        t += "Deletions: " + str(pl['pull_request']['deletions']) + "\n"
+    if (str(pl['pull_request']['changed_files'])):
+        t += "Changed Files: " + str(pl['pull_request']['changed_files']) + "\n"
+    if (str(pl['pull_request']['commits'])):
+        t += "Commits: " + str(pl['pull_request']['commits']) + "\n"
+    if (str(pl['pull_request']['comments'])):
+        t += "Comments: " + str(pl['pull_request']['comments']) + "\n"
+    if (str(pl['pull_request']['draft'])):
+        t += "Draft: " + str(pl['pull_request']['draft']) + "\n"
+    if (str(pl['pull_request']['state'])):
+        t += "State: " + str(pl['pull_request']['state']) + "\n"
+
+    t += "\n"
+    if (str(pl['pull_request']['body'])):
+        t += "Comment: " + str(pl['pull_request']['body']) + "\n"
+
+    if ('organization' in pl):
+        s_cm = "[" + str(pl['organization']['login']) + "/" + str(pl['repository']['name']) + "]"
+    else:
+        s_cm = "[" + str(pl['repository']['owner']['login']) + "/" + str(pl['repository']['name']) + "]"
+
+    s = "Pull Request " + str(pl['action']) + ": " + str(pl['repository']['name'])
+
+    return s, t
+
+
 def github_else(eventtype, pl):
     t = "Event: " + str(eventtype) + "\n\n"
     t += json.dumps(pl, indent=2, sort_keys=True)
@@ -293,6 +370,10 @@ elif (eventtype == "member"):
     subject, message = github_member(pl)
 elif (eventtype == "commit_comment"):
     subject, message = github_commit_comment(pl)
+elif (eventtype == "fork"):
+    subject, message = github_fork(pl)
+elif (eventtype == "pull_request"):
+    subject, message = github_pull_request(pl)
 else:
     subject, message = github_else(eventtype, pl)
 
