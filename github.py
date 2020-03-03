@@ -305,7 +305,7 @@ def github_fork(pl):
 
 
 def github_pull_request(pl):
-    t = "Event: Pull Request\n\n"
+    t = "Event: Pull Request (on your repository)\n\n"
     t += "Action: " + str(pl['action']) + "\n"
     t += "Sender: " + str(pl['sender']['login']) + "\n"
     t += "Repository Name: " + str(pl['repository']['name']) + "\n"
@@ -348,6 +348,44 @@ def github_pull_request(pl):
         s_cm = "[" + str(pl['repository']['owner']['login']) + "/" + str(pl['repository']['name']) + "]"
 
     s = "Pull Request " + str(pl['action']) + ": " + str(pl['repository']['name'])
+
+    return s, t
+
+
+def github_meta(pl):
+    t = "Event: Meta\n\n"
+    t += "Action: " + str(pl['action']) + "\n"
+    t += "Sender: " + str(pl['sender']['login']) + "\n"
+
+    t += "\n\n"
+    if (str(pl['hook']['config']['url'])):
+        t += "Hook: " + str(pl['hook']['config']['url']) + "\n"
+    t += "\n"
+
+    s = "Meta " + str(pl['action'])
+
+    return s, t
+
+
+def github_create(pl):
+    t = "Event: Create Pull Request (on another repository)\n\n"
+    t += "Sender: " + str(pl['sender']['login']) + "\n"
+    t += "Repository Name: " + str(pl['repository']['name']) + "\n"
+    t += "Repository Full: " + str(pl['repository']['full_name']) + "\n"
+    if (str(pl['repository']['description']) != "null"):
+        t += "Description: " + str(pl['repository']['description']) + "\n"
+    t += "URL: " + str(pl['repository']['html_url']) + "\n"
+    t += "Owner: " + str(pl['repository']['owner']['login']) + "\n"
+
+    t += "\n\n"
+    if (str(pl['master_branch'])):
+        t += "Master Branch: " + str(pl['master_branch']) + "\n"
+    if (str(pl['ref'])):
+        t += "Ref: " + str(pl['ref']) + "\n"
+    if (str(pl['ref_type'])):
+        t += "Ref Type: " + str(pl['ref_type']) + "\n"
+
+    s = "Pull Request created from: " + str(pl['repository']['name'])
 
     return s, t
 
@@ -415,6 +453,10 @@ elif (eventtype == "fork"):
     subject, message = github_fork(pl)
 elif (eventtype == "pull_request"):
     subject, message = github_pull_request(pl)
+elif (eventtype == "meta"):
+    subject, message = github_meta(pl)
+elif (eventtype == "create"):
+    subject, message = github_create(pl)
 else:
     subject, message = github_else(eventtype, pl)
 
