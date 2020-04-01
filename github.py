@@ -411,6 +411,33 @@ def github_delete_branch(pl):
     return s, t
 
 
+def github_repository_vulnerability_alert(pl):
+    t = "Event: Repository Vulnerability Alert\n\n"
+    t += "Sender: " + str(pl['sender']['login']) + "\n"
+    t += "Repository Name: " + str(pl['repository']['name']) + "\n"
+    t += "Repository Full: " + str(pl['repository']['full_name']) + "\n"
+    if (str(pl['repository']['description']) != "null"):
+        t += "Description: " + str(pl['repository']['description']) + "\n"
+    t += "URL: " + str(pl['repository']['html_url']) + "\n"
+    t += "Owner: " + str(pl['repository']['owner']['login']) + "\n"
+
+    t += "\n\n"
+    if (str(pl['alert']['affected_package_name'])):
+        t += "Package: " + str(pl['alert']['affected_package_name']) + "\n"
+    if (str(pl['alert']['affected_range'])):
+        t += "Affected range: " + str(pl['alert']['affected_range']) + "\n"
+    if (str(pl['alert']['external_identifier'])):
+        t += "External identifier: " + str(pl['alert']['external_identifier']) + "\n"
+    if (str(pl['alert']['external_reference'])):
+        t += "External reference: " + str(pl['alert']['external_reference']) + "\n"
+    if (str(pl['alert']['fixed_in'])):
+        t += "Fixed in: " + str(pl['alert']['fixed_in']) + "\n"
+
+    s = "Repository Vulnerability Alert: " + str(pl['repository']['name'])
+
+    return s, t
+
+
 def github_else(eventtype, pl):
     t = "Event: " + str(eventtype) + "\n\n"
     t += json.dumps(pl, indent=2, sort_keys=True)
@@ -480,6 +507,8 @@ elif (eventtype == "create"):
     subject, message = github_create(pl)
 elif (eventtype == "delete" and pl['ref_type'] == 'branch'):
     subject, message = github_delete_branch(pl)
+elif (eventtype == "repository_vulnerability_alert"):
+    subject, message = github_repository_vulnerability_alert(pl)
 else:
     subject, message = github_else(eventtype, pl)
 
