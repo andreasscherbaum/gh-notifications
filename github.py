@@ -390,6 +390,27 @@ def github_create(pl):
     return s, t
 
 
+def github_delete_branch(pl):
+    t = "Event: Delete branch\n\n"
+    t += "Sender: " + str(pl['sender']['login']) + "\n"
+    t += "Repository Name: " + str(pl['repository']['name']) + "\n"
+    t += "Repository Full: " + str(pl['repository']['full_name']) + "\n"
+    if (str(pl['repository']['description']) != "null"):
+        t += "Description: " + str(pl['repository']['description']) + "\n"
+    t += "URL: " + str(pl['repository']['html_url']) + "\n"
+    t += "Owner: " + str(pl['repository']['owner']['login']) + "\n"
+
+    t += "\n\n"
+    if (str(pl['ref'])):
+        t += "Ref: " + str(pl['ref']) + "\n"
+    if (str(pl['ref_type'])):
+        t += "Ref Type: " + str(pl['ref_type']) + "\n"
+
+    s = "Branch deleted from: " + str(pl['repository']['name'])
+
+    return s, t
+
+
 def github_else(eventtype, pl):
     t = "Event: " + str(eventtype) + "\n\n"
     t += json.dumps(pl, indent=2, sort_keys=True)
@@ -457,6 +478,8 @@ elif (eventtype == "meta"):
     subject, message = github_meta(pl)
 elif (eventtype == "create"):
     subject, message = github_create(pl)
+elif (eventtype == "delete" and pl['ref_type'] == 'branch'):
+    subject, message = github_delete_branch(pl)
 else:
     subject, message = github_else(eventtype, pl)
 
