@@ -438,6 +438,27 @@ def github_repository_vulnerability_alert(pl):
     return s, t
 
 
+def github_project(pl):
+    t = "Event: Project " + str(pl['action']) + "\n\n"
+    t += "Sender: " + str(pl['sender']['login']) + "\n"
+    t += "Repository Name: " + str(pl['repository']['name']) + "\n"
+    t += "Repository Full: " + str(pl['repository']['full_name']) + "\n"
+    if (str(pl['repository']['description']) != "null"):
+        t += "Description: " + str(pl['repository']['description']) + "\n"
+    t += "URL: " + str(pl['repository']['html_url']) + "\n"
+    t += "Owner: " + str(pl['repository']['owner']['login']) + "\n"
+
+    t += "\n\n"
+    if (str(pl['project']['html_url'])):
+        t += "URL: " + str(pl['project']['html_url']) + "\n"
+    if (str(pl['project']['body'])):
+        t += "Body:\n\n" + str(pl['project']['body']) + "\n"
+
+    s = "Project: " + str(pl['action'])
+
+    return s, t
+
+
 def github_else(eventtype, pl):
     t = "Event: " + str(eventtype) + "\n\n"
     t += json.dumps(pl, indent=2, sort_keys=True)
@@ -509,6 +530,8 @@ elif (eventtype == "delete" and pl['ref_type'] == 'branch'):
     subject, message = github_delete_branch(pl)
 elif (eventtype == "repository_vulnerability_alert"):
     subject, message = github_repository_vulnerability_alert(pl)
+elif (eventtype == "project"):
+    subject, message = github_project(pl)
 else:
     subject, message = github_else(eventtype, pl)
 
