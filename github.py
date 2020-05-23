@@ -128,7 +128,10 @@ def github_star(pl):
     else:
         s_cm = "[" + str(pl['repository']['owner']['login']) + "/" + str(pl['repository']['name']) + "]"
 
-    s = "Repository " + str(pl['action']) + ": " + str(pl['repository']['name'])
+    if (pl['action'] == 'created'):
+        s = "Repository starred: " + str(pl['repository']['name'])
+    else:
+        s = "Repository " + str(pl['action']) + ": " + str(pl['repository']['name'])
 
     return s, t
 
