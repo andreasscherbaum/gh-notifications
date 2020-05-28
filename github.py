@@ -107,7 +107,7 @@ def github_watch(pl):
     else:
         s_cm = "[" + str(pl['repository']['owner']['login']) + "/" + str(pl['repository']['name']) + "]"
 
-    s = "Repository " + str(pl['action']) + ": " + str(pl['repository']['name'])
+    s = "Repository Watch " + str(pl['action']) + ": " + str(pl['repository']['name'])
 
     return s, t
 
@@ -129,9 +129,9 @@ def github_star(pl):
         s_cm = "[" + str(pl['repository']['owner']['login']) + "/" + str(pl['repository']['name']) + "]"
 
     if (pl['action'] == 'created'):
-        s = "Repository starred: " + str(pl['repository']['name'])
+        s = "Repository Star starred: " + str(pl['repository']['name'])
     else:
-        s = "Repository " + str(pl['action']) + ": " + str(pl['repository']['name'])
+        s = "Repository Star " + str(pl['action']) + ": " + str(pl['repository']['name'])
 
     return s, t
 
