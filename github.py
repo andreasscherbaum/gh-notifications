@@ -462,6 +462,24 @@ def github_project(pl):
     return s, t
 
 
+def github_label(pl):
+    t = "Event: Label " + str(pl['action']) + "\n"
+    if (str(pl['label']['name'])):
+        t += "Label: " + str(pl['label']['name']) + "\n"
+    t += "\n"
+    t += "Sender: " + str(pl['sender']['login']) + "\n"
+    t += "Repository Name: " + str(pl['repository']['name']) + "\n"
+    t += "Repository Full: " + str(pl['repository']['full_name']) + "\n"
+    if (str(pl['repository']['description']) != "null"):
+        t += "Description: " + str(pl['repository']['description']) + "\n"
+    t += "URL: " + str(pl['repository']['html_url']) + "\n"
+    t += "Owner: " + str(pl['repository']['owner']['login']) + "\n"
+
+    s = "Label: " + str(pl['label']['name'])
+
+    return s, t
+
+
 def github_else(eventtype, pl):
     t = "Event: " + str(eventtype) + "\n\n"
     t += json.dumps(pl, indent=2, sort_keys=True)
@@ -535,6 +553,8 @@ elif (eventtype == "repository_vulnerability_alert"):
     subject, message = github_repository_vulnerability_alert(pl)
 elif (eventtype == "project"):
     subject, message = github_project(pl)
+elif (eventtype == "label"):
+    subject, message = github_label(pl)
 else:
     subject, message = github_else(eventtype, pl)
 
