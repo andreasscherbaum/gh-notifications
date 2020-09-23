@@ -480,6 +480,54 @@ def github_label(pl):
     return s, t
 
 
+def github_check_run(pl):
+    t = "Event: check_run " + str(pl['action']) + "\n"
+    t += "\n"
+    t += "Sender: " + str(pl['sender']['login']) + "\n"
+    t += "Repository Name: " + str(pl['repository']['name']) + "\n"
+    t += "Repository Full: " + str(pl['repository']['full_name']) + "\n"
+    if (str(pl['repository']['description']) != "null"):
+        t += "Description: " + str(pl['repository']['description']) + "\n"
+    t += "URL: " + str(pl['repository']['html_url']) + "\n"
+    t += "Owner: " + str(pl['repository']['owner']['login']) + "\n\n"
+
+    if ('status' in pl['check_run']):
+        t += "Status: " + str(pl['check_run']['status']) + "\n"
+    if ('conclusion' in pl['check_run']):
+        t += "Conclusion: " + str(pl['check_run']['conclusion']) + "\n"
+    if ('details_url' in pl['check_run']):
+        t += "Details: " + str(pl['check_run']['details_url']) + "\n"
+
+    s = "Check_run: " + str(pl['action'])
+
+    return s, t
+
+
+def github_check_suite(pl):
+    t = "Event: check_suite " + str(pl['action']) + "\n"
+    t += "\n"
+    t += "Sender: " + str(pl['sender']['login']) + "\n"
+    t += "Repository Name: " + str(pl['repository']['name']) + "\n"
+    t += "Repository Full: " + str(pl['repository']['full_name']) + "\n"
+    if (str(pl['repository']['description']) != "null"):
+        t += "Description: " + str(pl['repository']['description']) + "\n"
+    t += "URL: " + str(pl['repository']['html_url']) + "\n"
+    t += "Owner: " + str(pl['repository']['owner']['login']) + "\n\n"
+
+    if ('status' in pl['check_suite']):
+        t += "Status: " + str(pl['check_suite']['status']) + "\n"
+    if ('conclusion' in pl['check_suite']):
+        t += "Conclusion: " + str(pl['check_suite']['conclusion']) + "\n"
+    if ('url' in pl['check_suite']):
+        t += "Details: " + str(pl['check_suite']['url']) + "\n"
+    if ('message' in pl['check_suite']['head_commit']):
+        t += "\nCommit message: " + str(pl['check_suite']['head_commit']['message']) + "\n"
+
+    s = "Check_suite: " + str(pl['action'])
+
+    return s, t
+
+
 def github_else(eventtype, pl):
     t = "Event: " + str(eventtype) + "\n\n"
     t += json.dumps(pl, indent=2, sort_keys=True)
@@ -555,6 +603,10 @@ elif (eventtype == "project"):
     subject, message = github_project(pl)
 elif (eventtype == "label"):
     subject, message = github_label(pl)
+elif (eventtype == "check_run"):
+    subject, message = github_check_run(pl)
+elif (eventtype == "check_suite"):
+    subject, message = github_check_suite(pl)
 else:
     subject, message = github_else(eventtype, pl)
 
