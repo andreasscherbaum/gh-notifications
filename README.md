@@ -121,3 +121,8 @@ Currently this script recognizes the following GitHub events:
 * check_suite
 
 It will generate an email with unknown events.
+
+
+## pre-commit hook
+
+The included file _pre-commit_ can be placed in _.git/hooks_ and will ensure that the _README.md_ is updated if changes are applied to the Python script.

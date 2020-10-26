@@ -1,0 +1,16 @@
+#!/bin/bash
+
+
+# most changes in this repository add new GitHub events
+# the README file should always be updated to reflect the added events
+# make sure the README is newer than the Python script
+
+
+echo "Checking if README.md is updated ..."
+if [ "README.md" -ot "github.py" ];
+then
+    echo "Please update the 'README.md' file!"
+    exit 1
+fi
+echo "Good to go."
+
