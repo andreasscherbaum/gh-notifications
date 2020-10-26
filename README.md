@@ -106,5 +106,18 @@ Currently this script recognizes the following GitHub events:
 * watch
 * star
 * issues
+* member
+* commit_comment
+* issue_comment
+* fork
+* pull_request
+* meta
+* create
+* delete (branch)
+* repository_vulnerability_alert
+* project
+* label
+* check_run
+* check_suite
 
 It will generate an email with unknown events.
