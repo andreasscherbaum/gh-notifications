@@ -119,6 +119,7 @@ Currently this script recognizes the following GitHub events:
 * label
 * check_run
 * check_suite
+* deploy_key
 
 It will generate an email with unknown events.
 

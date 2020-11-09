@@ -528,6 +528,31 @@ def github_check_suite(pl):
     return s, t
 
 
+def github_deploy_key(pl):
+    t = "Event: deploy_key " + str(pl['action']) + "\n"
+    t += "\n"
+    t += "Sender: " + str(pl['sender']['login']) + "\n"
+    t += "Repository Name: " + str(pl['repository']['name']) + "\n"
+    t += "Repository Full: " + str(pl['repository']['full_name']) + "\n"
+    if (str(pl['repository']['description']) != "null"):
+        t += "Description: " + str(pl['repository']['description']) + "\n"
+    t += "URL: " + str(pl['repository']['html_url']) + "\n"
+    t += "Owner: " + str(pl['repository']['owner']['login']) + "\n\n"
+
+    if ('title' in pl['key']):
+        t += "Key title: " + str(pl['key']['title']) + "\n"
+    if ('url' in pl['key']):
+        t += "Key url: " + str(pl['key']['url']) + "\n"
+    if ('read_only' in pl['key']):
+        t += "Key read-only: " + str(pl['key']['read_only']) + "\n"
+    if ('verified' in pl['key']):
+        t += "Key verified: " + str(pl['key']['verified']) + "\n"
+
+    s = "Deploy_key: " + str(pl['action'])
+
+    return s, t
+
+
 def github_else(eventtype, pl):
     t = "Event: " + str(eventtype) + "\n\n"
     t += json.dumps(pl, indent=2, sort_keys=True)
@@ -605,8 +630,8 @@ elif (eventtype == "label"):
     subject, message = github_label(pl)
 elif (eventtype == "check_run"):
     subject, message = github_check_run(pl)
-elif (eventtype == "check_suite"):
-    subject, message = github_check_suite(pl)
+elif (eventtype == "deploy_key"):
+    subject, message = github_deploy_key(pl)
 else:
     subject, message = github_else(eventtype, pl)
 
