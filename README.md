@@ -121,7 +121,7 @@ Currently this script recognizes the following GitHub events:
 * check_suite
 * deploy_key
 
-It will generate an email with unknown events.
+It will generate an email with details about unknown events.
 
 
 ## pre-commit hook

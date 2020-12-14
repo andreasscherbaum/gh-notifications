@@ -630,6 +630,8 @@ elif (eventtype == "label"):
     subject, message = github_label(pl)
 elif (eventtype == "check_run"):
     subject, message = github_check_run(pl)
+elif (eventtype == "check_suite"):
+    subject, message = github_check_suite(pl)
 elif (eventtype == "deploy_key"):
     subject, message = github_deploy_key(pl)
 else:
