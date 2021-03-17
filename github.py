@@ -553,6 +553,35 @@ def github_deploy_key(pl):
     return s, t
 
 
+def github_status(pl):
+    t = "Event: status " + str(pl['state']) + "\n"
+    t += "\n"
+    t += "Sender: " + str(pl['sender']['login']) + "\n"
+    t += "Repository Name: " + str(pl['repository']['name']) + "\n"
+    t += "Repository Full: " + str(pl['repository']['full_name']) + "\n"
+    if (str(pl['repository']['description']) != "null"):
+        t += "Description: " + str(pl['repository']['description']) + "\n"
+    t += "URL: " + str(pl['repository']['html_url']) + "\n"
+    t += "Owner: " + str(pl['repository']['owner']['login']) + "\n\n"
+
+    if ('context' in pl):
+        t += "Context: " + str(pl['context']) + "\n"
+    if ('description' in pl):
+        t += "Description: " + str(pl['description']) + "\n"
+    if ('state' in pl):
+        t += "State: " + str(pl['state']) + "\n"
+    if ('created_at' in pl):
+        t += "Created at: " + str(pl['created_at']) + "\n"
+    if ('updated_at' in pl):
+        t += "Updated at: " + str(pl['updated_at']) + "\n"
+    if ('target_url' in pl):
+        t += "Target URL: " + str(pl['target_url']) + "\n"
+
+    s = "Status: " + str(pl['state'])
+
+    return s, t
+
+
 def github_else(eventtype, pl):
     t = "Event: " + str(eventtype) + "\n\n"
     t += json.dumps(pl, indent=2, sort_keys=True)
@@ -634,6 +663,8 @@ elif (eventtype == "check_suite"):
     subject, message = github_check_suite(pl)
 elif (eventtype == "deploy_key"):
     subject, message = github_deploy_key(pl)
+elif (eventtype == "status"):
+    subject, message = github_status(pl)
 else:
     subject, message = github_else(eventtype, pl)
 

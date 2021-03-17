@@ -120,6 +120,7 @@ Currently this script recognizes the following GitHub events:
 * check_run
 * check_suite
 * deploy_key
+* status
 
 It will generate an email with details about unknown events.
 
