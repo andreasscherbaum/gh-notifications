@@ -1,0 +1,33 @@
+name: PR test
+
+# Run this workflow every time a new commit pushed to your repository
+on: 
+  push:
+    #branches: '**'
+    #branches-ignore: 'main'
+
+  pull_request:
+    #branches: '**'
+    #branches-ignore: 'main'
+
+  workflow_dispatch:
+
+
+defaults:
+  run:
+    shell: bash
+
+
+jobs:
+  pr-test:
+    name: Check the PR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+
+      # check Python syntax
+      - name: Python syntax check
+        run: python3 -m py_compile github.py
