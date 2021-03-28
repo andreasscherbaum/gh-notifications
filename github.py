@@ -355,6 +355,76 @@ def github_pull_request(pl):
     return s, t
 
 
+def github_pull_request_review(pl):
+    t = "Event: Pull Request Review\n\n"
+    t += "Action: " + str(pl['action']) + "\n"
+    t += "Sender: " + str(pl['sender']['login']) + "\n"
+    t += "Repository Name: " + str(pl['repository']['name']) + "\n"
+    t += "Repository Full: " + str(pl['repository']['full_name']) + "\n"
+    if (str(pl['repository']['description']) != "null"):
+        t += "Description: " + str(pl['repository']['description']) + "\n"
+    t += "URL: " + str(pl['repository']['html_url']) + "\n"
+    t += "Owner: " + str(pl['repository']['owner']['login']) + "\n"
+
+    t += "\n\n"
+    if (str(pl['pull_request']['title'])):
+        t += "Title: " + str(pl['pull_request']['title']) + "\n"
+    t += "\n"
+    if (str(pl['pull_request']['user']['login'])):
+        t += "User: " + str(pl['pull_request']['user']['login']) + "\n"
+    if (str(pl['pull_request']['_links']['html']['href'])):
+        t += "URL: " + str(pl['pull_request']['_links']['html']['href']) + "\n"
+
+    t += "\n"
+    if (str(pl['review']['html_url'])):
+        t += "Review URL: " + str(pl['review']['html_url']) + "\n"
+
+    if ('organization' in pl):
+        s_cm = "[" + str(pl['organization']['login']) + "/" + str(pl['repository']['name']) + "]"
+    else:
+        s_cm = "[" + str(pl['repository']['owner']['login']) + "/" + str(pl['repository']['name']) + "]"
+
+    s = "Pull Request Review " + str(pl['action']) + ": " + str(pl['repository']['name'])
+
+    return s, t
+
+
+def github_pull_request_review_comment(pl):
+    t = "Event: Pull Request Review Comment\n\n"
+    t += "Action: " + str(pl['action']) + "\n"
+    t += "Sender: " + str(pl['sender']['login']) + "\n"
+    t += "Repository Name: " + str(pl['repository']['name']) + "\n"
+    t += "Repository Full: " + str(pl['repository']['full_name']) + "\n"
+    if (str(pl['repository']['description']) != "null"):
+        t += "Description: " + str(pl['repository']['description']) + "\n"
+    t += "URL: " + str(pl['repository']['html_url']) + "\n"
+    t += "Owner: " + str(pl['repository']['owner']['login']) + "\n"
+
+    t += "\n\n"
+    if (str(pl['pull_request']['title'])):
+        t += "Title: " + str(pl['pull_request']['title']) + "\n"
+    t += "\n"
+    if (str(pl['pull_request']['user']['login'])):
+        t += "User: " + str(pl['pull_request']['user']['login']) + "\n"
+    if (str(pl['pull_request']['_links']['html']['href'])):
+        t += "URL: " + str(pl['pull_request']['_links']['html']['href']) + "\n"
+
+    t += "\n"
+    if (str(pl['comment']['html_url'])):
+        t += "Comment URL: " + str(pl['comment']['html_url']) + "\n"
+    if (str(pl['comment']['body'])):
+        t += "Comment:\n" + str(pl['comment']['body']) + "\n"
+
+    if ('organization' in pl):
+        s_cm = "[" + str(pl['organization']['login']) + "/" + str(pl['repository']['name']) + "]"
+    else:
+        s_cm = "[" + str(pl['repository']['owner']['login']) + "/" + str(pl['repository']['name']) + "]"
+
+    s = "Pull Request Review Comment " + str(pl['action']) + ": " + str(pl['repository']['name'])
+
+    return s, t
+
+
 def github_meta(pl):
     t = "Event: Meta\n\n"
     t += "Action: " + str(pl['action']) + "\n"
@@ -645,6 +715,10 @@ elif (eventtype == "fork"):
     subject, message = github_fork(pl)
 elif (eventtype == "pull_request"):
     subject, message = github_pull_request(pl)
+elif (eventtype == "pull_request_review"):
+    subject, message = github_pull_request_review(pl)
+elif (eventtype == "pull_request_review_comment"):
+    subject, message = github_pull_request_review_comment(pl)
 elif (eventtype == "meta"):
     subject, message = github_meta(pl)
 elif (eventtype == "create"):
