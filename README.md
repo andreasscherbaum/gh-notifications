@@ -121,6 +121,7 @@ Currently this script recognizes the following GitHub events:
 * label
 * check_run
 * check_suite
+* workflow_job
 * deploy_key
 * status
 

@@ -598,6 +598,29 @@ def github_check_suite(pl):
     return s, t
 
 
+def github_workflow_job(pl):
+    t = "Event: workflow_job " + str(pl['action']) + "\n"
+    t += "\n"
+    t += "Sender: " + str(pl['sender']['login']) + "\n"
+    t += "Repository Name: " + str(pl['repository']['name']) + "\n"
+    t += "Repository Full: " + str(pl['repository']['full_name']) + "\n"
+    if (str(pl['repository']['description']) != "null"):
+        t += "Description: " + str(pl['repository']['description']) + "\n"
+    t += "URL: " + str(pl['repository']['html_url']) + "\n"
+    t += "Owner: " + str(pl['repository']['owner']['login']) + "\n\n"
+
+    if ('status' in pl['workflow_job']):
+        t += "Status: " + str(pl['workflow_job']['status']) + "\n"
+    if ('name' in pl['workflow_job']):
+        t += "Name: " + str(pl['workflow_job']['name']) + "\n"
+    if ('html_url' in pl['workflow_job']):
+        t += "Details: " + str(pl['workflow_job']['html_url']) + "\n"
+
+    s = "Workflow_job: " + str(pl['action'])
+
+    return s, t
+
+
 def github_deploy_key(pl):
     t = "Event: deploy_key " + str(pl['action']) + "\n"
     t += "\n"
@@ -735,6 +758,10 @@ elif (eventtype == "check_run"):
     subject, message = github_check_run(pl)
 elif (eventtype == "check_suite"):
     subject, message = github_check_suite(pl)
+elif (eventtype == "check_suite"):
+    subject, message = github_check_suite(pl)
+elif (eventtype == "workflow_job"):
+    subject, message = github_workflow_job(pl)
 elif (eventtype == "deploy_key"):
     subject, message = github_deploy_key(pl)
 elif (eventtype == "status"):
