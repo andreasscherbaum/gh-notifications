@@ -112,6 +112,7 @@ Currently this script recognizes the following GitHub events:
 * fork
 * pull_request
 * pull_request_review
+* pull_request_review_thread
 * pull_request_review_comment
 * meta
 * create
