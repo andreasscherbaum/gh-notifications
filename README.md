@@ -123,6 +123,7 @@ Currently this script recognizes the following GitHub events:
 * check_run
 * check_suite
 * workflow_job
+* workflow_run
 * deploy_key
 * status
 

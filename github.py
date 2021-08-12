@@ -651,6 +651,38 @@ def github_workflow_job(pl):
     return s, t
 
 
+def github_workflow_run(pl):
+    t = "Event: workflow_run " + str(pl['action']) + "\n"
+    t += "\n"
+    t += "Sender: " + str(pl['sender']['login']) + "\n"
+    t += "Repository Name: " + str(pl['repository']['name']) + "\n"
+    t += "Repository Full: " + str(pl['repository']['full_name']) + "\n"
+    if (str(pl['repository']['description']) != "null"):
+        t += "Description: " + str(pl['repository']['description']) + "\n"
+    t += "URL: " + str(pl['repository']['html_url']) + "\n"
+    t += "Owner: " + str(pl['repository']['owner']['login']) + "\n\n"
+
+    t += "\n"
+    if ('name' in pl['workflow']):
+        t += "Workflow Name: " + str(pl['workflow']['name']) + "\n"
+    if ('path' in pl['workflow']):
+        t += "Workflow Path: " + str(pl['workflow']['path']) + "\n"
+    if ('state' in pl['workflow']):
+        t += "Workflow Status: " + str(pl['workflow']['state']) + "\n"
+    t += "\n"
+
+    if ('name' in pl['workflow_run']):
+        t += "Workflow Run Name: " + str(pl['workflow_run']['name']) + "\n"
+    if ('html_url' in pl['workflow_run']):
+        t += "Workflow Run Details: " + str(pl['workflow_run']['html_url']) + "\n"
+    if ('status' in pl['workflow_run']):
+        t += "Workflow Run Status: " + str(pl['workflow_run']['status']) + "\n"
+
+    s = "Workflow_run: " + str(pl['action'])
+
+    return s, t
+
+
 def github_deploy_key(pl):
     t = "Event: deploy_key " + str(pl['action']) + "\n"
     t += "\n"
@@ -794,6 +826,8 @@ elif (eventtype == "check_suite"):
     subject, message = github_check_suite(pl)
 elif (eventtype == "workflow_job"):
     subject, message = github_workflow_job(pl)
+elif (eventtype == "workflow_run"):
+    subject, message = github_workflow_run(pl)
 elif (eventtype == "deploy_key"):
     subject, message = github_deploy_key(pl)
 elif (eventtype == "status"):
