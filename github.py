@@ -750,6 +750,33 @@ def github_branch_protection_rule(pl):
     return s, t
 
 
+def github_dependabot_alert(pl):
+    t = "Event: dependabot_alert " + str(pl['action']) + "\n"
+    t += "\n"
+    t += "Sender: " + str(pl['sender']['login']) + "\n"
+    t += "Repository Name: " + str(pl['repository']['name']) + "\n"
+    t += "Repository Full: " + str(pl['repository']['full_name']) + "\n"
+    if (str(pl['repository']['description']) != "null"):
+        t += "Description: " + str(pl['repository']['description']) + "\n"
+    t += "URL: " + str(pl['repository']['html_url']) + "\n"
+    t += "Owner: " + str(pl['repository']['owner']['login']) + "\n\n"
+
+    if ('dependency' in pl['alert']):
+        t += "Dependency Manifest Path: " + str(pl['alert']['dependency']['manifest_path']) + "\n"
+        t += "Dependency Package Name: " + str(pl['alert']['dependency']['package']['name']) + "\n"
+        t += "Dependency Package Ecosystem: " + str(pl['alert']['dependency']['package']['ecosystem']) + "\n"
+    if ('security_advisory' in pl['alert']):
+        t += "Description: " + str(pl['alert']['security_advisory']['description']) + "\n"
+    if ('state' in pl['alert']):
+        t += "State: " + str(pl['alert']['state']) + "\n"
+
+    s = "Branch Protection Rule: " + str(pl['action'])
+
+    s = "Dependabot Alert: " + str(pl['action'])
+
+    return s, t
+
+
 def github_status(pl):
     t = "Event: status " + str(pl['state']) + "\n"
     t += "\n"
@@ -874,6 +901,8 @@ elif (eventtype == "deploy_key"):
     subject, message = github_deploy_key(pl)
 elif (eventtype == "branch_protection_rule"):
     subject, message = github_branch_protection_rule(pl)
+elif (eventtype == "dependabot_alert"):
+    subject, message = github_dependabot_alert(pl)
 elif (eventtype == "status"):
     subject, message = github_status(pl)
 else:
