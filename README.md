@@ -125,6 +125,7 @@ Currently this script recognizes the following GitHub events:
 * workflow_job
 * workflow_run
 * deploy_key
+* branch_protection_rule
 * status
 
 It will generate an email with details about unknown events.

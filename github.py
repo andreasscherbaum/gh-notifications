@@ -708,6 +708,48 @@ def github_deploy_key(pl):
     return s, t
 
 
+def github_branch_protection_rule(pl):
+    t = "Event: branch_protection_rule " + str(pl['action']) + "\n"
+    t += "\n"
+    t += "Sender: " + str(pl['sender']['login']) + "\n"
+    t += "Repository Name: " + str(pl['repository']['name']) + "\n"
+    t += "Repository Full: " + str(pl['repository']['full_name']) + "\n"
+    if (str(pl['repository']['description']) != "null"):
+        t += "Description: " + str(pl['repository']['description']) + "\n"
+    t += "URL: " + str(pl['repository']['html_url']) + "\n"
+    t += "Owner: " + str(pl['repository']['owner']['login']) + "\n\n"
+
+    if ('name' in pl['rule']):
+        t += "Rule name: " + str(pl['rule']['name']) + "\n"
+    keys = ['admin_enforced',
+            'allow_deletions_enforcement_level',
+            'allow_force_pushes_enforcement_level',
+            'authorized_actors_only',
+            'authorized_dismissal_actors_only',
+            'create_protected',
+            'dismiss_stale_reviews_on_push',
+            'ignore_approvals_from_contributors',
+            'linear_history_requirement_enforcement_level',
+            'merge_queue_enforcement_level',
+            'pull_request_reviews_enforcement_level',
+            'require_code_owner_review',
+            'require_last_push_approval',
+            'required_approving_review_count',
+            'required_conversation_resolution_level',
+            'required_deployments_enforcement_level',
+            'required_status_checks_enforcement_level',
+            'signature_requirement_enforcement_level',
+            'strict_required_status_checks_policy']
+            
+    for key in keys:
+      if (key in pl['rule']):
+          t += "Rule " + key + ": " + str(pl['rule'][key]) + "\n"
+
+    s = "Branch Protection Rule: " + str(pl['action'])
+
+    return s, t
+
+
 def github_status(pl):
     t = "Event: status " + str(pl['state']) + "\n"
     t += "\n"
@@ -830,6 +872,8 @@ elif (eventtype == "workflow_run"):
     subject, message = github_workflow_run(pl)
 elif (eventtype == "deploy_key"):
     subject, message = github_deploy_key(pl)
+elif (eventtype == "branch_protection_rule"):
+    subject, message = github_branch_protection_rule(pl)
 elif (eventtype == "status"):
     subject, message = github_status(pl)
 else:
